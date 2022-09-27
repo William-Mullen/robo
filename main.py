@@ -55,7 +55,8 @@ while(program):
 #        while (not touch_sensor.pressed):
 #            motor1.run(500)
 #            motor2.run(500)
-#        ev3.speaker.beep()
+#        ev3.speaker.beep()ls
+
 #        while (distance_sensor <= 500):
 #            motor1.run(-500)
 #            motor2.run(-500)
