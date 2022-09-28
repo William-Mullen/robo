@@ -19,48 +19,56 @@ motor2 = Motor(port = Port.C, positive_direction = Direction.CLOCKWISE)
 distance_sensor = UltrasonicSensor(Port.S4)
 touch_sensor = TouchSensor(Port.S1)
 program = 1
-buttons = ev3.buttons.pressed()
 
 # Write your program here.
 
 while(program):  
 
     #move forward 1.2 meters, stop, beep wait for button press
-    motor2.run(10000)
-    motor1.run(10000)
+    motor2.run_target(10000, 2520, wait=False)
+    motor1.run_target(10000, 2520, wait=False)
+    wait(5000)
     ev3.speaker.beep()
 
-    wait(5000)
-    
-    motor1.stop()
-    motor2.stop()
-    motor2.run(0)
-    motor1.run(0)
-    wait(5000)
+    while True:
+        buttons = ev3.buttons.pressed()
+        while (distance_sensor.distance() <= 500):
+            if Button.CENTER in buttons:
+                motor2.run_target(100, 10, wait=False)
+                motor1.run_target(100, 10, wait=False)
+        ev3.speaker.beep()
+        break
+        wait(100)
 
+    # while True:
+    #     buttons = ev3.buttons.pressed()
+    #     if Button.CENTER in buttons:
+    #         motor2.run_target(100, 10, wait=False)
+    #         motor1.run_target(100, 10, wait=False)
+    #         while (distance_sensor.distance() <= 500):
+    #             motor2.run_target(100, 10, wait=False)
+    #             motor1.run_target(100, 10, wait=False)
+    #         ev3.speaker.beep()
+    #         break
+    #     wait(100)
+     
+   
+    buttons.clear()
+    while True:
+        buttons = ev3.buttons.pressed()
+        if Button.CENTER in buttons:
+            motor2.run_target(100, 1024, wait=False)
+            motor1.run_target(100, 1024, wait=False)
+            buttons.clear()
+        if (touch_sensor.pressed()):
+            motor2.break()
+            motor1.break()
+            motor2.run_target(100, -1022, wait=False)
+            motor1.run_target(100, -1022, wait=False)
+            break()
+        wait(100)
+            
     #move forward until distantce to object is 50 cm, stop, beep wait for button press
-    if Button.CENTER in buttons:
-       motor1.run(100000000)
-       motor2.run(100000000)
-       if (distance_sensor.distance <= 500):
-           motor1.run(0)
-           moror2.run(0)
-           ev3.speaker.beep()
-       buttons.clear
 
     program=0
-    
-#     # move forward until bump sensor is pressed stop and go in reverse 50 cm
-#    if Button.CENTER in buttons:
-#        while (not touch_sensor.pressed):
-#            motor1.run(500)
-#            motor2.run(500)
-#        ev3.speaker.beep()ls
-
-#        while (distance_sensor <= 500):
-#            motor1.run(-500)
-#            motor2.run(-500)
-#         motor1.run(0)
-#         motor2.run(0)
-    
-    #if Button.CENTER in self.ev3.buttons.pressed() returns a list of pressed butto
+  
