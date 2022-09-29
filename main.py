@@ -24,51 +24,43 @@ program = 1
 
 while(program):  
 
-    #move forward 1.2 meters, stop, beep wait for button press
-    motor2.run_target(10000, 2520, wait=False)
-    motor1.run_target(10000, 2520, wait=False)
-    wait(5000)
+  #move forward 1.2 meters, stop, beep wait for button press
+    motor1.run_target(400, 5000, wait=False)
+    motor2.run_target(400, 5000, wait=False)
+    wait(8000)
     ev3.speaker.beep()
+    motor1.reset_angle(0)
+    motor2.reset_angle(0)
 
-    while True:
-        buttons = ev3.buttons.pressed()
-        while (distance_sensor.distance() <= 500):
-            if Button.CENTER in buttons:
-                motor2.run_target(100, 10, wait=False)
-                motor1.run_target(100, 10, wait=False)
-        ev3.speaker.beep()
-        break
-        wait(100)
 
-    # while True:
-    #     buttons = ev3.buttons.pressed()
-    #     if Button.CENTER in buttons:
-    #         motor2.run_target(100, 10, wait=False)
-    #         motor1.run_target(100, 10, wait=False)
-    #         while (distance_sensor.distance() <= 500):
-    #             motor2.run_target(100, 10, wait=False)
-    #             motor1.run_target(100, 10, wait=False)
-    #         ev3.speaker.beep()
-    #         break
-    #     wait(100)
-     
-   
-    buttons.clear()
     while True:
         buttons = ev3.buttons.pressed()
         if Button.CENTER in buttons:
-            motor2.run_target(100, 1024, wait=False)
-            motor1.run_target(100, 1024, wait=False)
-            buttons.clear()
+            while (distance_sensor.distance() >= 500):
+                motor2.run(200)
+                motor1.run(200)
+            motor1.run(0)
+            motor2.run(0)
+            ev3.speaker.beep()
+            break
+     
+    motor1.reset_angle(0)
+    motor2.reset_angle(0)
+    while True:
+        buttons = ev3.buttons.pressed()
+        if Button.CENTER in buttons:
+            motor2.run(100)
+            motor1.run(100)
+            motor1.reset_angle(0)
+            motor2.reset_angle(0)
         if (touch_sensor.pressed()):
-            motor2.break()
-            motor1.break()
             motor2.run_target(100, -1022, wait=False)
             motor1.run_target(100, -1022, wait=False)
-            break()
-        wait(100)
+            motor1.run(0)
+            motor2.run(0)
+            break
+  
             
     #move forward until distantce to object is 50 cm, stop, beep wait for button press
 
     program=0
-  
